@@ -13,6 +13,24 @@ class AddProfilePopup extends StatefulWidget {
 class _AddProfilePopupState extends State<AddProfilePopup> {
   final TextEditingController _nameController = TextEditingController();
   bool isKidsProfile = false;
+  bool isNameEmpty = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Add listener to track changes in the TextField
+    _nameController.addListener(() {
+      setState(() {
+        isNameEmpty = _nameController.text.isEmpty;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,32 +67,24 @@ class _AddProfilePopupState extends State<AddProfilePopup> {
                     fontWeight: FontWeight.bold,
                     color: Colors.white),
               ),
-              _nameController.text.isEmpty
-                  ? TextButton(
-                      onPressed: null,
-                      child: const Text(
-                        "Save",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  : TextButton(
-                      onPressed: () {
+              TextButton(
+                onPressed: isNameEmpty
+                    ? null // Disable button if name is empty
+                    : () {
                         // Handle save action
-                        log(_nameController.text);
+                        log(_nameController.text); // Print the name value
                       },
-                      child: const Text(
-                        "Save",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                child: Text(
+                  "Save",
+                  style: TextStyle(
+                    color: isNameEmpty
+                        ? Colors.grey
+                        : Colors.white, // Grey when disabled
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 20),
@@ -109,7 +119,7 @@ class _AddProfilePopupState extends State<AddProfilePopup> {
             ],
           ),
           const SizedBox(height: 20),
-          // Profile Name Input (Move this out of Stack)
+          // Profile Name Input
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.75,
             child: TextField(
@@ -125,14 +135,12 @@ class _AddProfilePopupState extends State<AddProfilePopup> {
                   color: Color(0xFF8B8B8B), // Default hint color
                   fontSize: 17,
                 ),
-                floatingLabelBehavior: FloatingLabelBehavior
-                    .auto, // This will float the label when focused or has text
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
                 contentPadding: EdgeInsets.only(
                   left: 12,
                   top: 10,
                   bottom: 10,
                 ),
-
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(color: Colors.white, width: 2),
@@ -142,10 +150,9 @@ class _AddProfilePopupState extends State<AddProfilePopup> {
                   borderSide: BorderSide(color: Color(0xFF606060), width: 2),
                 ),
               ),
-              cursorColor: Colors.blue, // Cursor blinks in blue
+              cursorColor: Colors.blue,
             ),
           ),
-
           const SizedBox(height: 20),
           // Kids Profile Toggle
           SizedBox(

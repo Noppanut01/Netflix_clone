@@ -34,6 +34,7 @@ class UserProfile extends StatelessWidget {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(imageUrl),
+                        fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.circular(8),
                     ),

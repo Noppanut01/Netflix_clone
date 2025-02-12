@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:netflix_clone/widgets/bottom_navbar.dart';
-import '../screens/add_profile.dart';
+import '../screens/add_profile_screen.dart';
 
 class UserProfile extends StatelessWidget {
   final String imageUrl;
@@ -57,7 +57,7 @@ class UserProfile extends StatelessWidget {
                 isScrollControlled: true,
                 backgroundColor: Colors.transparent,
                 barrierColor: Colors.black,
-                builder: (context) => AddProfilePopup(),
+                builder: (context) => AddProfileScreen(),
               );
             },
             child: SizedBox(

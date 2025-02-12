@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '/widgets/user_profile.dart';
-import '/data/user.dart';
+import '../models/users.dart';
 
 class PickUserScreen extends StatefulWidget {
   const PickUserScreen({super.key});
@@ -45,7 +45,7 @@ class _PickUserScreenState extends State<PickUserScreen> {
               crossAxisCount: 2,
             ),
             shrinkWrap: true,
-            itemCount: 5,
+            itemCount: users.length,
             itemBuilder: (BuildContext context, int index) {
               Widget profile = UserProfile(
                 imageUrl: users[index].imageUrl,

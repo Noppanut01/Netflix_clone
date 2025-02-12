@@ -1,24 +1,35 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../models/users.dart';
+import 'choose_icon_screen.dart';
 
-class AddProfilePopup extends StatefulWidget {
-  const AddProfilePopup({super.key});
+class AddProfileScreen extends StatefulWidget {
+  const AddProfileScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
   _AddProfilePopupState createState() => _AddProfilePopupState();
 }
 
-class _AddProfilePopupState extends State<AddProfilePopup> {
+class _AddProfilePopupState extends State<AddProfileScreen> {
   final TextEditingController _nameController = TextEditingController();
   bool isKidsProfile = false;
   bool isNameEmpty = true;
+  String? selectedIconPath;
+
+  _loadSelectedIcon() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selectedIconPath = prefs.getString('selectedIcon');
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    // Add listener to track changes in the TextField
+
+    _loadSelectedIcon();
+
     _nameController.addListener(() {
       setState(() {
         isNameEmpty = _nameController.text.isEmpty;
@@ -38,14 +49,13 @@ class _AddProfilePopupState extends State<AddProfilePopup> {
       height: MediaQuery.of(context).size.height * 0.9,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Color(0xFF161616), // Dark theme background
+        color: Color(0xFF161616),
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(8),
         ),
       ),
       child: Column(
         children: [
-          // Header Row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -69,17 +79,19 @@ class _AddProfilePopupState extends State<AddProfilePopup> {
               ),
               TextButton(
                 onPressed: isNameEmpty
-                    ? null // Disable button if name is empty
+                    ? null
                     : () {
-                        // Handle save action
-                        log(_nameController.text); // Print the name value
+                        users[users.length - 1] = (
+                          imageUrl: selectedIconPath,
+                          name: _nameController.text,
+                          exist: true,
+                        );
+                        Navigator.pop(context);
                       },
                 child: Text(
                   "Save",
                   style: TextStyle(
-                    color: isNameEmpty
-                        ? Colors.grey
-                        : Colors.white, // Grey when disabled
+                    color: isNameEmpty ? Colors.grey : Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -88,7 +100,6 @@ class _AddProfilePopupState extends State<AddProfilePopup> {
             ],
           ),
           const SizedBox(height: 20),
-          // Profile Image with Edit Button
           Stack(
             alignment: Alignment(1.2, 1.2),
             children: [
@@ -97,11 +108,15 @@ class _AddProfilePopupState extends State<AddProfilePopup> {
                 height: 103,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  image: DecorationImage(
-                    image: AssetImage(
-                        "assets/pictures/profile-10.jpg"), // Change to your default image
-                    fit: BoxFit.cover,
-                  ),
+                  image: selectedIconPath == null
+                      ? DecorationImage(
+                          image: AssetImage("assets/pictures/profile-10.jpg"),
+                          fit: BoxFit.cover,
+                        )
+                      : DecorationImage(
+                          image: AssetImage(selectedIconPath!),
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
               Container(
@@ -111,15 +126,31 @@ class _AddProfilePopupState extends State<AddProfilePopup> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(100),
                 ),
-                child: Icon(
-                  Icons.edit,
-                  size: 20,
+                child: InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      barrierColor: Colors.black,
+                      builder: (context) => ChooseIconScreen(
+                        onIconSelected: (iconPath) {
+                          setState(() {
+                            selectedIconPath = iconPath;
+                          });
+                        },
+                      ),
+                    );
+                  },
+                  child: Icon(
+                    Icons.edit,
+                    size: 20,
+                  ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 20),
-          // Profile Name Input
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.75,
             child: TextField(
@@ -132,7 +163,7 @@ class _AddProfilePopupState extends State<AddProfilePopup> {
               decoration: InputDecoration(
                 labelText: "Profile Name",
                 labelStyle: TextStyle(
-                  color: Color(0xFF8B8B8B), // Default hint color
+                  color: Color(0xFF8B8B8B),
                   fontSize: 17,
                 ),
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -154,7 +185,6 @@ class _AddProfilePopupState extends State<AddProfilePopup> {
             ),
           ),
           const SizedBox(height: 20),
-          // Kids Profile Toggle
           SizedBox(
             width: 320,
             child: Column(
@@ -167,18 +197,15 @@ class _AddProfilePopupState extends State<AddProfilePopup> {
                       isKidsProfile = value;
                     });
                   },
-                  activeColor: Colors.white, // Thumb color when active
-                  inactiveThumbColor: Colors.white, // Thumb color when inactive
-                  activeTrackColor:
-                      Color(0xFF4061E7), // Track color when active
-                  inactiveTrackColor:
-                      Color(0xFF353438), // Track color when inactive
-                  trackOutlineColor: WidgetStateProperty.all(
-                      Colors.transparent), // Removes border
+                  activeColor: Colors.white,
+                  inactiveThumbColor: Colors.white,
+                  activeTrackColor: Color(0xFF4061E7),
+                  inactiveTrackColor: Color(0xFF353438),
+                  trackOutlineColor:
+                      WidgetStateProperty.all(Colors.transparent),
                   thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
                     (states) {
-                      return Icon(Icons.circle,
-                          size: 34, color: Colors.white); // Enlarged thumb
+                      return Icon(Icons.circle, size: 34, color: Colors.white);
                     },
                   ),
                 ),

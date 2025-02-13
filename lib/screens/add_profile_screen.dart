@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/users.dart';
+import '../providers/user_provider.dart';
 import 'choose_icon_screen.dart';
 
 class AddProfileScreen extends StatefulWidget {
@@ -27,7 +28,6 @@ class _AddProfilePopupState extends State<AddProfileScreen> {
   @override
   void initState() {
     super.initState();
-
     _loadSelectedIcon();
 
     _nameController.addListener(() {
@@ -45,6 +45,9 @@ class _AddProfilePopupState extends State<AddProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider =
+        Provider.of<UserProvider>(context); // Access UserProvider
+
     return Container(
       height: MediaQuery.of(context).size.height * 0.9,
       padding: const EdgeInsets.all(10),
@@ -81,10 +84,12 @@ class _AddProfilePopupState extends State<AddProfileScreen> {
                 onPressed: isNameEmpty
                     ? null
                     : () {
-                        users[users.length - 1] = (
-                          imageUrl: selectedIconPath,
-                          name: _nameController.text,
-                          exist: true,
+                        // Update user data and notify listeners to refresh UI
+                        userProvider.updateUser(
+                          userProvider.users.length - 1,
+                          selectedIconPath ??
+                              "assets/pictures/profile-10.jpg", // Default image if no icon selected
+                          _nameController.text,
                         );
                         Navigator.pop(context);
                       },

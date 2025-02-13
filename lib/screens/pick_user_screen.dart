@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import '/widgets/user_profile.dart';
-import '../models/users.dart';
+import 'package:provider/provider.dart';
+import '../widgets/user_profile.dart';
+import '../providers/user_provider.dart';
+import 'edit_profile_screen.dart'; // Import UserProvider
 
-class PickUserScreen extends StatefulWidget {
+class PickUserScreen extends StatelessWidget {
   const PickUserScreen({super.key});
 
-  @override
-  State<PickUserScreen> createState() => _PickUserScreenState();
-}
-
-class _PickUserScreenState extends State<PickUserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Who's Watching?",
           style: TextStyle(
             color: Colors.white,
@@ -23,8 +20,13 @@ class _PickUserScreenState extends State<PickUserScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () {},
-            child: Text(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EditProfileScreen()),
+              );
+            },
+            child: const Text(
               "Edit",
               style: TextStyle(
                 color: Colors.white,
@@ -40,20 +42,25 @@ class _PickUserScreenState extends State<PickUserScreen> {
         height: double.infinity,
         child: Padding(
           padding: const EdgeInsets.all(70.0),
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-            ),
-            shrinkWrap: true,
-            itemCount: users.length,
-            itemBuilder: (BuildContext context, int index) {
-              Widget profile = UserProfile(
-                imageUrl: users[index].imageUrl,
-                name: users[index].name,
-                exist: users[index].exist,
+          child: Consumer<UserProvider>(
+            // Use Consumer<UserProvider>
+            builder: (context, userProvider, child) {
+              return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                shrinkWrap: true,
+                itemCount:
+                    userProvider.users.length, // Access users from UserProvider
+                itemBuilder: (BuildContext context, int index) {
+                  final user = userProvider.users[index];
+                  return UserProfile(
+                    imageUrl: user.imageUrl,
+                    name: user.name,
+                    exist: user.exist,
+                  );
+                },
               );
-              // Check if it's the last item
-              return profile;
             },
           ),
         ),

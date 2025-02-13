@@ -5,7 +5,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return Center(
       child: Text("Hello Home Screen"),
     );
   }

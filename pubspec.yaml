@@ -40,6 +40,7 @@ dependencies:
   material_symbols_icons: ^4.2805.1
   shared_preferences: ^2.5.2
   watcher: ^1.1.1
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:

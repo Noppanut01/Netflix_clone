@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:netflix_clone/api/api_services.dart';
+import 'package:netflix_clone/widgets/movie_card_widget.dart';
+import '../models/movie_model.dart';
 import '../widgets/banner_widget.dart';
 import 'dart:math';
 import '../widgets/netflix_appbar_widget.dart'; // Import the new NetflixAppBar
@@ -15,11 +18,13 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
   double _opacity = 1.0;
   bool _showCategories = true;
-
+  ApiServices apiServices = ApiServices();
+  late Future<MovieModel> nowPlaying;
   @override
   void initState() {
-    super.initState();
     _scrollController.addListener(_onScroll);
+    nowPlaying = apiServices.getNowPlayingMovies();
+    super.initState();
   }
 
   void _onScroll() {
@@ -69,28 +74,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                     BannerWidget(),
-                    SizedBox(
-                      height: 250,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 10,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            width: 150,
-                            margin: const EdgeInsets.only(right: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius: BorderRadius.circular(8),
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                  "https://images.pexels.com/photos/9227572/pexels-photo-9227572.jpeg?auto=compress&cs=tinysrgb&w=600",
-                                ),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          );
-                        },
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: SizedBox(
+                        height: 250,
+                        child: MovieCardWidget(
+                          future: nowPlaying,
+                          headlineText: "Now playing",
+                        ),
                       ),
                     ),
                   ],

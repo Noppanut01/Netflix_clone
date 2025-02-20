@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
-class CustomArrowBack extends StatelessWidget {
-  const CustomArrowBack({
+class CustomRoundIconButton extends StatelessWidget {
+  final IconData icon;
+  final Function()? ontab;
+  const CustomRoundIconButton({
     super.key,
+    required this.icon,
+    this.ontab,
   });
 
   @override
@@ -18,10 +22,10 @@ class CustomArrowBack extends StatelessWidget {
             color: Color(0xFF232223),
           ),
         ),
-        IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(
-            Icons.close,
+        InkWell(
+          onTap: ontab,
+          child: Icon(
+            icon,
             color: Colors.white,
             size: 17,
             weight: 700,

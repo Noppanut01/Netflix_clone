@@ -1,5 +1,2 @@
-import 'package:flutter/material.dart';
-
-const apiKey = "f90610d3dd7728707e2a7fee3ed01264";
-const kBackgroudColor = Colors.black;
+const apiKey = "7203a718e37c2ae079507d28cbce9937";
 const imageUrl = 'https://image.tmdb.org/t/p/w500';

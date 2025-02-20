@@ -7,7 +7,17 @@ class DownloadScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Center(
-        child: Text("Download screen"),
+        child: SizedBox(
+          width: double.infinity, // Make sure it doesn't overflow horizontally
+          child: Text(
+            "Download screen",
+            style: TextStyle(
+              fontSize: 24,
+              color: Colors.white,
+            ), // Control font size
+            textAlign: TextAlign.center, // Keep text centered
+          ),
+        ),
       ),
     );
   }

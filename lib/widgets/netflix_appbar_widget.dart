@@ -31,7 +31,7 @@ class _NetflixAppBarState extends State<NetflixAppBar> {
         filter:
             ImageFilter.blur(sigmaX: 100, sigmaY: 100), // Glassmorphism effect
         child: AnimatedContainer(
-          duration: Duration(milliseconds: 200), // Smooth animation
+          duration: Duration(milliseconds: 300), // Smooth animation
           curve: Curves.easeInOut,
           height: widget.appBarHeight,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -85,7 +85,16 @@ class _NetflixAppBarState extends State<NetflixAppBar> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => DownloadScreen(),
+                                      builder: (context) => DefaultTextStyle(
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal,
+                                          decoration: TextDecoration.none,
+                                          // backgroundColor: Colors.transparent,
+                                        ),
+                                        child: DownloadScreen(),
+                                      ),
                                     ),
                                   );
                                 },
@@ -97,12 +106,24 @@ class _NetflixAppBarState extends State<NetflixAppBar> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => SearchScreen(),
+                                      builder: (context) => DefaultTextStyle(
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal,
+                                          decoration: TextDecoration.none,
+                                          // backgroundColor: Colors.transparent,
+                                        ),
+                                        child: SearchScreen(),
+                                      ),
                                     ),
                                   );
                                 },
-                                child: Icon(CupertinoIcons.search,
-                                    color: Colors.white, size: 27),
+                                child: Icon(
+                                  CupertinoIcons.search,
+                                  color: Colors.white,
+                                  size: 27,
+                                ),
                               ),
                             ],
                           ),

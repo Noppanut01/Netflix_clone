@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../widgets/custom_arrow_back.dart';
+import '../widgets/custom_round_icon_button.dart';
 import '../models/icons.dart';
 
 class ChooseIconScreen extends StatefulWidget {
@@ -39,7 +39,15 @@ class _ChooseIconScreenState extends State<ChooseIconScreen> {
         children: [
           Row(
             children: [
-              CustomArrowBack(),
+              CustomRoundIconButton(
+                icon: Icons.close,
+                ontab: () {
+                  Navigator.pop(context);
+                },
+              ),
+              SizedBox(
+                width: 10,
+              ),
               Text(
                 "Choose Icon",
                 style: TextStyle(

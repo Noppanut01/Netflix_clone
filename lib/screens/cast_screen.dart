@@ -5,8 +5,11 @@ class CastScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text("Cast screen"),
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.65,
+      child: Center(
+        child: Text("Cast screen"),
+      ),
     );
   }
 }

@@ -45,7 +45,6 @@ app.*.map.json
 /android/app/release
 
 # Api key
-lib/common
-lib/common/utils.dart
+# lib/common/
 # counter file
 .VSCodeCounter

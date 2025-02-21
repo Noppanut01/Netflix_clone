@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-class MovieModel {
+class UpcomingMoviesModel {
   Dates dates;
   int page;
   List<Result> results;
   int totalPages;
   int totalResults;
 
-  MovieModel({
+  UpcomingMoviesModel({
     required this.dates,
     required this.page,
     required this.results,
@@ -15,14 +15,14 @@ class MovieModel {
     required this.totalResults,
   });
 
-  MovieModel copyWith({
+  UpcomingMoviesModel copyWith({
     Dates? dates,
     int? page,
     List<Result>? results,
     int? totalPages,
     int? totalResults,
   }) =>
-      MovieModel(
+      UpcomingMoviesModel(
         dates: dates ?? this.dates,
         page: page ?? this.page,
         results: results ?? this.results,
@@ -30,12 +30,13 @@ class MovieModel {
         totalResults: totalResults ?? this.totalResults,
       );
 
-  factory MovieModel.fromRawJson(String str) =>
-      MovieModel.fromJson(json.decode(str));
+  factory UpcomingMoviesModel.fromRawJson(String str) =>
+      UpcomingMoviesModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory MovieModel.fromJson(Map<String, dynamic> json) => MovieModel(
+  factory UpcomingMoviesModel.fromJson(Map<String, dynamic> json) =>
+      UpcomingMoviesModel(
         dates: Dates.fromJson(json["dates"]),
         page: json["page"],
         results:
@@ -196,11 +197,11 @@ class Result {
 }
 
 // ignore: constant_identifier_names
-enum OriginalLanguage { EN, TH, ZH }
+enum OriginalLanguage { EN, LV, ZH }
 
 final originalLanguageValues = EnumValues({
   "en": OriginalLanguage.EN,
-  "th": OriginalLanguage.TH,
+  "lv": OriginalLanguage.LV,
   "zh": OriginalLanguage.ZH
 });
 

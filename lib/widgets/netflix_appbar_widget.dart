@@ -73,8 +73,8 @@ class _NetflixAppBarState extends State<NetflixAppBar> {
                                     showModalBottomSheet(
                                       context: context,
                                       isScrollControlled: true,
-                                      backgroundColor: Colors.transparent,
-                                      barrierColor: Colors.black,
+                                      backgroundColor: Color(0xFF2B2B2B),
+                                      barrierColor: Colors.transparent,
                                       builder: (context) => CastScreen(),
                                     );
                                   },

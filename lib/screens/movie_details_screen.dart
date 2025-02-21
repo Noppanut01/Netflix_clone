@@ -22,6 +22,7 @@ class MovieDetailsScreen extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.24,
                 decoration: BoxDecoration(
                   color: Colors.blue,
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
               Positioned(
@@ -43,7 +44,12 @@ class MovieDetailsScreen extends StatelessWidget {
                       },
                     ),
                     SizedBox(width: 10),
-                    CustomRoundIconButton(icon: Icons.close),
+                    CustomRoundIconButton(
+                      icon: Icons.close,
+                      ontab: () {
+                        Navigator.pop(context);
+                      },
+                    ),
                   ],
                 ),
               ),

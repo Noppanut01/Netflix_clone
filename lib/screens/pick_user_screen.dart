@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../widgets/user_profile.dart';
 import '../providers/user_provider.dart';
-import 'edit_profile_screen.dart'; // Import UserProvider
+import 'edit_profile_screen.dart';
 
 class PickUserScreen extends StatelessWidget {
   const PickUserScreen({super.key});

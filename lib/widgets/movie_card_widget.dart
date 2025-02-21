@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:netflix_clone/common/utils.dart';
-import 'package:netflix_clone/models/movie_model.dart';
 import 'package:netflix_clone/screens/movie_details_screen.dart';
 
 class MovieCardWidget extends StatelessWidget {
-  final Future<MovieModel> future;
+  final Future future;
   final String headlineText;
   const MovieCardWidget({
     super.key,
@@ -24,10 +23,10 @@ class MovieCardWidget extends StatelessWidget {
             children: [
               Text(
                 headlineText,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               Expanded(
                 child: ListView.builder(

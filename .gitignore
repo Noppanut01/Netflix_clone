@@ -46,5 +46,6 @@ app.*.map.json
 
 # Api key
 lib/common/
+lib/common/utils.dart
 # counter file
 .VSCodeCounter

@@ -14,14 +14,14 @@ var key = '&api_key=$apiKey';
 late String endPoint;
 
 class ApiServices {
-  Future<MovieModel> getNowPlayingMovies() async {
+  Future<MoviesModel> getNowPlayingMovies() async {
     endPoint = "movie/now_playing?language=en-US";
     final url = "$baseUrl$endPoint$key";
 
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       log("Get now playing success");
-      return MovieModel.fromJson(jsonDecode(response.body));
+      return MoviesModel.fromJson(jsonDecode(response.body));
     }
     throw Exception("failed to load now playing movies");
   }

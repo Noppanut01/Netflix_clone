@@ -130,7 +130,6 @@ class _NetflixAppBarState extends State<NetflixAppBar> {
                         ),
                       ],
                     ),
-
                     // 🛠️ FIX: Use AnimatedSize to prevent overflow
                     AnimatedSize(
                       duration: Duration(milliseconds: 250),

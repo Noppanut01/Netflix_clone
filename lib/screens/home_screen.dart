@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double _opacity = 1.0;
   bool _showCategories = true;
   ApiServices apiServices = ApiServices();
-  late Future<MovieModel> nowPlaying;
+  late Future<MoviesModel> nowPlaying;
   late Future<PopularMoviesModel> popularMovies;
   late Future<UpcomingMoviesModel> upcomingMovies;
   @override
@@ -54,85 +54,69 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF383737),
-              Color(0xFF262626),
-              Color(0xFF1F1F20),
-              Colors.transparent
-            ],
-            stops: [0.0, 0.5, 0.7, 1],
+      body: Stack(
+        children: [
+          // Background & Content
+          SafeArea(
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: [
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.12),
+                  BannerWidget(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 5),
+                    child: SizedBox(
+                      height: 250,
+                      child: MovieCardWidget(
+                        future: nowPlaying,
+                        headlineText: "Now playing",
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 5),
+                    child: SizedBox(
+                      height: 250,
+                      child: MovieCardWidget(
+                        future: popularMovies,
+                        headlineText: "Popular",
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 5),
+                    child: SizedBox(
+                      height: 250,
+                      child: MovieCardWidget(
+                        future: upcomingMovies,
+                        headlineText: "Upcoming movie",
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-        child: Stack(
-          children: [
-            // Background & Content
-            SafeArea(
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-                    BannerWidget(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 5),
-                      child: SizedBox(
-                        height: 250,
-                        child: MovieCardWidget(
-                          future: nowPlaying,
-                          headlineText: "Now playing",
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 5),
-                      child: SizedBox(
-                        height: 250,
-                        child: MovieCardWidget(
-                          future: popularMovies,
-                          headlineText: "Popular",
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 5),
-                      child: SizedBox(
-                        height: 250,
-                        child: MovieCardWidget(
-                          future: upcomingMovies,
-                          headlineText: "Upcoming movie",
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            // ),
+          // ),
 
-            // Floating Glassmorphism AppBar
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: NetflixAppBar(
-                opacity: _opacity,
-                showCategories: _showCategories,
-                appBarHeight:
-                    _showCategories ? 180 : 120, // Shrinks when scrolling
-              ),
+          // Floating Glassmorphism AppBar
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: NetflixAppBar(
+              opacity: _opacity,
+              showCategories: _showCategories,
+              appBarHeight:
+                  _showCategories ? 180 : 120, // Shrinks when scrolling
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

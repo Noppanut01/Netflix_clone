@@ -8,7 +8,7 @@ class CastScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.65,
+      height: MediaQuery.of(context).size.height * 0.6,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Stack(

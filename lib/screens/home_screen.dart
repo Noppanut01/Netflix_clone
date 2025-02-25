@@ -3,10 +3,12 @@ import 'package:netflix_clone/models/popular_movies_model.dart';
 import 'package:netflix_clone/models/upcoming_movies_model.dart';
 import 'package:netflix_clone/services/api_services.dart';
 import 'package:netflix_clone/widgets/movie_card_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/movie_model.dart';
 import '../widgets/banner_widget.dart';
 import 'dart:math';
-import '../widgets/netflix_appbar_widget.dart'; // Import the new NetflixAppBar
+import '../widgets/netflix_appbar_widget.dart';
+import 'movie_details_screen.dart'; // Import the new NetflixAppBar
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,12 +26,25 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<MoviesModel> nowPlaying;
   late Future<PopularMoviesModel> popularMovies;
   late Future<UpcomingMoviesModel> upcomingMovies;
+
+  int? movieId;
+  bool isMovieIdLoaded = false;
+  void _loadMovieId() async {
+    if (isMovieIdLoaded) return; // Prevent redundant calls
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      movieId = prefs.getInt('movieId');
+      isMovieIdLoaded = true; // Mark as loaded
+    });
+  }
+
   @override
   void initState() {
     _scrollController.addListener(_onScroll);
     nowPlaying = apiServices.getNowPlayingMovies();
     popularMovies = apiServices.getPopularMovies();
     upcomingMovies = apiServices.getUpcomingMovies();
+    _loadMovieId();
     super.initState();
   }
 
@@ -39,7 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       // Reduce opacity when scrolling down
       _opacity = max(0, 1 - (offset / 200)); // Smooth fade effect
-
       // Hide categories when scrolling down
       _showCategories = offset < 150;
     });
@@ -62,9 +76,23 @@ class _HomeScreenState extends State<HomeScreen> {
               controller: _scrollController,
               scrollDirection: Axis.vertical,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.12),
-                  BannerWidget(),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.11),
+                  InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        barrierColor: Colors.black,
+                        builder: (context) => MovieDetailsScreen(
+                          movieId: movieId!,
+                        ),
+                      );
+                    },
+                    child: BannerWidget(),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10.0, vertical: 5),
@@ -97,13 +125,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         headlineText: "Upcoming movie",
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
           ),
           // ),
-
           // Floating Glassmorphism AppBar
           Positioned(
             top: 0,

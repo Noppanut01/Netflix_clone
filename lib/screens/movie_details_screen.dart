@@ -7,6 +7,7 @@
 // import '../models/movie_detail_model.dart';
 // import '../models/recommendation_movies_model.dart';
 // import '../services/api_services.dart';
+// import 'full_screen_video_player_screen.dart';
 
 // class MovieDetailsScreen extends StatefulWidget {
 //   final int movieId;
@@ -47,131 +48,6 @@
 //       backgroundColor: Colors.black,
 //       body: Stack(
 //         children: [
-//           // Scrollable content below the video
-//           SingleChildScrollView(
-//             child: Padding(
-//               padding: const EdgeInsets.all(10.0),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   SizedBox(height: 70),
-//                   FutureBuilder<MovieDetailModel>(
-//                     future: movieDetail,
-//                     builder: (context, snapshot) {
-//                       if (snapshot.connectionState == ConnectionState.waiting) {
-//                         return _buildLoadingIndicator();
-//                       } else if (snapshot.hasError ||
-//                           !snapshot.hasData ||
-//                           snapshot.data == null) {
-//                         return _buildErrorMessage(
-//                             "Movie details not available");
-//                       }
-
-//                       final movieDetails = snapshot.data!;
-//                       return Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           SizedBox(
-//                               height:
-//                                   240), // Add some space for the video player
-//                           Text(
-//                             movieDetails.title,
-//                             style: TextStyle(
-//                               color: Colors.white,
-//                               fontWeight: FontWeight.bold,
-//                               fontSize: 24,
-//                             ),
-//                           ),
-//                           SizedBox(height: 10),
-//                           Text(
-//                             movieDetails.overview,
-//                             style: TextStyle(color: Colors.white),
-//                           ),
-//                           SizedBox(height: 20),
-//                           Text(
-//                             "More like this",
-//                             style: TextStyle(
-//                               color: Colors.white,
-//                               fontWeight: FontWeight.bold,
-//                               fontSize: 18,
-//                             ),
-//                           ),
-//                           SizedBox(height: 20),
-//                           FutureBuilder<MovieRecommendationsModel>(
-//                             future: movieRecommendationModel,
-//                             builder: (context, snapshot) {
-//                               if (snapshot.connectionState ==
-//                                   ConnectionState.waiting) {
-//                                 return _buildLoadingIndicator();
-//                               } else if (snapshot.hasError ||
-//                                   !snapshot.hasData ||
-//                                   snapshot.data!.results.isEmpty) {
-//                                 return _buildErrorMessage(
-//                                     "No recommendations available");
-//                               }
-
-//                               final recommendations = snapshot.data!;
-//                               return Padding(
-//                                 padding: const EdgeInsets.all(1.0),
-//                                 child: Column(
-//                                   crossAxisAlignment: CrossAxisAlignment.start,
-//                                   children: [
-//                                     SizedBox(height: 20),
-//                                     GridView.builder(
-//                                       physics: BouncingScrollPhysics(),
-//                                       padding: EdgeInsets.zero,
-//                                       itemCount: recommendations.results.length,
-//                                       gridDelegate:
-//                                           SliverGridDelegateWithFixedCrossAxisCount(
-//                                         crossAxisCount: 3,
-//                                         mainAxisSpacing: 15,
-//                                         childAspectRatio: 1.5 / 2,
-//                                       ),
-//                                       shrinkWrap: true,
-//                                       itemBuilder: (context, index) {
-//                                         return ClipRRect(
-//                                           borderRadius:
-//                                               BorderRadius.circular(10),
-//                                           child: InkWell(
-//                                             onTap: () {
-//                                               Navigator.push(
-//                                                 context,
-//                                                 MaterialPageRoute(
-//                                                   builder: (context) =>
-//                                                       MovieDetailsScreen(
-//                                                     movieId: recommendations
-//                                                         .results[index].id,
-//                                                   ),
-//                                                 ),
-//                                               );
-//                                             },
-//                                             child: CachedNetworkImage(
-//                                               imageUrl:
-//                                                   "$imageUrl${recommendations.results[index].posterPath}",
-//                                               placeholder: (context, url) =>
-//                                                   _buildLoadingIndicator(),
-//                                               errorWidget:
-//                                                   (context, url, error) => Icon(
-//                                                       Icons.error,
-//                                                       color: Colors.white),
-//                                             ),
-//                                           ),
-//                                         );
-//                                       },
-//                                     ),
-//                                   ],
-//                                 ),
-//                               );
-//                             },
-//                           ),
-//                         ],
-//                       );
-//                     },
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
 //           // Fixed Video Player at the top
 //           Positioned(
 //             top: 60,
@@ -191,7 +67,7 @@
 
 //                 _youtubeController = YoutubePlayerController(
 //                   initialVideoId: snapshot.data!,
-//                   flags: YoutubePlayerFlags(
+//                   flags: const YoutubePlayerFlags(
 //                     autoPlay: true,
 //                     mute: false,
 //                     isLive: false,
@@ -199,18 +75,176 @@
 //                 );
 
 //                 return YoutubePlayerBuilder(
-//                   player: YoutubePlayer(controller: _youtubeController!),
+//                   player: YoutubePlayer(
+//                     controller: _youtubeController!,
+//                     showVideoProgressIndicator: true,
+//                     onReady: () {},
+//                   ),
 //                   builder: (context, player) {
-//                     return Container(
-//                       color: Colors.black,
-//                       height: 240, // Set fixed height for the video player
-//                       child: player,
+//                     return Stack(
+//                       children: [
+//                         Container(
+//                           color: Colors.black,
+//                           height: 240,
+//                           child: player,
+//                         ),
+//                         Positioned(
+//                           right: 10,
+//                           bottom: 10,
+//                           child: IconButton(
+//                             icon: Icon(Icons.fullscreen, color: Colors.white),
+//                             onPressed: () {
+//                               Navigator.push(
+//                                 context,
+//                                 MaterialPageRoute(
+//                                   builder: (context) => FullScreenVideoPlayer(
+//                                     videoId: snapshot.data!,
+//                                   ),
+//                                 ),
+//                               );
+//                             },
+//                           ),
+//                         ),
+//                       ],
 //                     );
 //                   },
 //                 );
 //               },
 //             ),
 //           ),
+
+//           // Scrollable content below the video
+//           Positioned(
+//             top:
+//                 300, // Set the top value to 240, so the content starts after the video
+//             left: 0,
+//             right: 0,
+//             bottom: 0, // Allow the content to occupy the remaining space
+//             child: SingleChildScrollView(
+//               child: Padding(
+//                 padding: const EdgeInsets.all(10.0),
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     FutureBuilder<MovieDetailModel>(
+//                       future: movieDetail,
+//                       builder: (context, snapshot) {
+//                         if (snapshot.connectionState ==
+//                             ConnectionState.waiting) {
+//                           return _buildLoadingIndicator();
+//                         } else if (snapshot.hasError ||
+//                             !snapshot.hasData ||
+//                             snapshot.data == null) {
+//                           return _buildErrorMessage(
+//                               "Movie details not available");
+//                         }
+
+//                         final movieDetails = snapshot.data!;
+//                         return Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Text(
+//                               movieDetails.title,
+//                               style: TextStyle(
+//                                 color: Colors.white,
+//                                 fontWeight: FontWeight.bold,
+//                                 fontSize: 24,
+//                               ),
+//                             ),
+//                             SizedBox(height: 10),
+//                             Text(
+//                               movieDetails.overview,
+//                               style: TextStyle(color: Colors.white),
+//                             ),
+//                             SizedBox(height: 20),
+//                             Text(
+//                               "More like this",
+//                               style: TextStyle(
+//                                 color: Colors.white,
+//                                 fontWeight: FontWeight.bold,
+//                                 fontSize: 18,
+//                               ),
+//                             ),
+//                             SizedBox(height: 20),
+//                             FutureBuilder<MovieRecommendationsModel>(
+//                               future: movieRecommendationModel,
+//                               builder: (context, snapshot) {
+//                                 if (snapshot.connectionState ==
+//                                     ConnectionState.waiting) {
+//                                   return _buildLoadingIndicator();
+//                                 } else if (snapshot.hasError ||
+//                                     !snapshot.hasData ||
+//                                     snapshot.data!.results.isEmpty) {
+//                                   return _buildErrorMessage(
+//                                       "No recommendations available");
+//                                 }
+
+//                                 final recommendations = snapshot.data!;
+//                                 return Padding(
+//                                   padding: const EdgeInsets.all(0),
+//                                   child: Column(
+//                                     crossAxisAlignment:
+//                                         CrossAxisAlignment.start,
+//                                     children: [
+//                                       SizedBox(height: 20),
+//                                       GridView.builder(
+//                                         physics: BouncingScrollPhysics(),
+//                                         padding: EdgeInsets.zero,
+//                                         itemCount:
+//                                             recommendations.results.length,
+//                                         gridDelegate:
+//                                             SliverGridDelegateWithFixedCrossAxisCount(
+//                                           crossAxisCount: 3,
+//                                           mainAxisSpacing: 15,
+//                                           childAspectRatio: 1.5 / 2,
+//                                         ),
+//                                         shrinkWrap: true,
+//                                         itemBuilder: (context, index) {
+//                                           return ClipRRect(
+//                                             borderRadius:
+//                                                 BorderRadius.circular(10),
+//                                             child: InkWell(
+//                                               onTap: () {
+//                                                 Navigator.push(
+//                                                   context,
+//                                                   MaterialPageRoute(
+//                                                     builder: (context) =>
+//                                                         MovieDetailsScreen(
+//                                                       movieId: recommendations
+//                                                           .results[index].id,
+//                                                     ),
+//                                                   ),
+//                                                 );
+//                                               },
+//                                               child: CachedNetworkImage(
+//                                                 imageUrl:
+//                                                     "$imageUrl${recommendations.results[index].posterPath}",
+//                                                 placeholder: (context, url) =>
+//                                                     _buildLoadingIndicator(),
+//                                                 errorWidget: (context, url,
+//                                                         error) =>
+//                                                     Icon(Icons.error,
+//                                                         color: Colors.white),
+//                                               ),
+//                                             ),
+//                                           );
+//                                         },
+//                                       ),
+//                                     ],
+//                                   ),
+//                                 );
+//                               },
+//                             ),
+//                           ],
+//                         );
+//                       },
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ),
+
 //           // Close Button and Cast Button
 //           Positioned(
 //             top: 70,
@@ -280,6 +314,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../models/movie_detail_model.dart';
 import '../models/recommendation_movies_model.dart';
 import '../services/api_services.dart';
+import 'full_screen_video_player_screen.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
   final int movieId;
@@ -339,7 +374,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
                 _youtubeController = YoutubePlayerController(
                   initialVideoId: snapshot.data!,
-                  flags: YoutubePlayerFlags(
+                  flags: const YoutubePlayerFlags(
                     autoPlay: true,
                     mute: false,
                     isLive: false,
@@ -347,12 +382,38 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 );
 
                 return YoutubePlayerBuilder(
-                  player: YoutubePlayer(controller: _youtubeController!),
+                  player: YoutubePlayer(
+                    controller: _youtubeController!,
+                    showVideoProgressIndicator: true,
+                    onReady: () {},
+                  ),
                   builder: (context, player) {
-                    return Container(
-                      color: Colors.black,
-                      height: 240, // Set fixed height for the video player
-                      child: player,
+                    return Stack(
+                      children: [
+                        Container(
+                          color: Colors.black,
+                          height: 240,
+                          child: player,
+                        ),
+                        Positioned(
+                          right: 10,
+                          bottom: 10,
+                          child: IconButton(
+                            icon: Icon(Icons.fullscreen, color: Colors.white),
+                            onPressed: () {
+                              // Navigate to full-screen video player screen
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => FullScreenVideoPlayer(
+                                    videoId: snapshot.data!,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     );
                   },
                 );

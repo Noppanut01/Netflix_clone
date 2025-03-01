@@ -1,5 +1,3 @@
-// ignore_for_file: constant_identifier_names
-
 import 'dart:convert';
 
 class MovieRecommendationsModel {
@@ -51,7 +49,7 @@ class MovieRecommendationsModel {
 }
 
 class Result {
-  String backdropPath;
+  String? backdropPath;
   int id;
   String title;
   String originalTitle;

@@ -196,11 +196,11 @@ class Result {
       };
 }
 
-// ignore: constant_identifier_names
-enum OriginalLanguage { EN, LV, ZH }
+enum OriginalLanguage { EN, FR, LV, ZH }
 
 final originalLanguageValues = EnumValues({
   "en": OriginalLanguage.EN,
+  "fr": OriginalLanguage.FR,
   "lv": OriginalLanguage.LV,
   "zh": OriginalLanguage.ZH
 });

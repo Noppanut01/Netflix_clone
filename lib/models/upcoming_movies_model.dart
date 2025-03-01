@@ -45,6 +45,8 @@ class UpcomingMoviesModel {
         totalResults: json["total_results"],
       );
 
+  get releaseDate => null;
+
   Map<String, dynamic> toJson() => {
         "dates": dates.toJson(),
         "page": page,

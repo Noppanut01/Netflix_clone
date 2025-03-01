@@ -7,6 +7,7 @@ import "package:http/http.dart" as http;
 import "package:netflix_clone/models/movie_trailer_model.dart";
 import "package:netflix_clone/models/popular_movies_model.dart";
 import "package:netflix_clone/models/recommendation_movies_model.dart";
+import "package:netflix_clone/models/search_movie_model.dart";
 import "package:netflix_clone/models/upcoming_movies_model.dart";
 // import "package:netflix_clone/models/popular_movies_model.dart";
 // import "package:netflix_clone/models/upcoming_movies_model.dart";
@@ -92,6 +93,19 @@ class ApiServices {
       return MovieTrailerModel.fromJson(jsonDecode(response.body));
     } else {
       throw Exception("failed to load movie detail");
+    }
+  }
+
+  Future<SearchMovieModel> getSearchMovie(String movie) async {
+    endPoint = "search/movie?query=$movie&";
+    final url = "$baseUrl$endPoint$key";
+
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      log("Get search movie success");
+      return SearchMovieModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception("failed to load search movie");
     }
   }
 }

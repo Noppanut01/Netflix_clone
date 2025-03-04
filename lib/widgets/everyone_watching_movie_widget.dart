@@ -1,31 +1,35 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'package:netflix_clone/screens/movie_details_screen.dart';
 import 'package:netflix_clone/widgets/dynamic_button_widget.dart';
 
-class ComingSoonMovieWidget extends StatefulWidget {
+class EveryoneWatchingMovieWidget extends StatefulWidget {
   final String imageUrl;
   final String overview;
   final String logoUrl;
-  final String month;
-  final String day;
+  final String movieTitle;
+  final int movieId;
 
-  const ComingSoonMovieWidget({
+  const EveryoneWatchingMovieWidget({
     super.key,
     required this.imageUrl,
     required this.overview,
     required this.logoUrl,
-    required this.month,
-    required this.day,
+    required this.movieTitle,
+    required this.movieId,
   });
 
   @override
   // ignore: library_private_types_in_public_api
-  _ComingSoonMovieWidgetState createState() => _ComingSoonMovieWidgetState();
+  _EveryoneWatchingMovieWidgetState createState() =>
+      _EveryoneWatchingMovieWidgetState();
 }
 
-class _ComingSoonMovieWidgetState extends State<ComingSoonMovieWidget>
-    with TickerProviderStateMixin {
+class _EveryoneWatchingMovieWidgetState
+    extends State<EveryoneWatchingMovieWidget> with TickerProviderStateMixin {
   bool isReminderSet = false; // Track if reminder is set
   late AnimationController _snackBarAnimationController;
 
@@ -75,35 +79,13 @@ class _ComingSoonMovieWidgetState extends State<ComingSoonMovieWidget>
                     fit: BoxFit.contain,
                   ),
                   SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Text(
-                        "Coming",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        widget.month,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        widget.day,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    widget.movieTitle,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   SizedBox(height: 10),
                   Text(
@@ -117,27 +99,50 @@ class _ComingSoonMovieWidgetState extends State<ComingSoonMovieWidget>
                     ),
                   ),
                   SizedBox(height: 10),
-                  DynamicButtonWidget(
-                    labelWhenSet: "Reminder Set",
-                    labelWhenUnset: "Remind Me",
-                    iconWhenSet: CupertinoIcons.check_mark,
-                    iconWhenUnset: CupertinoIcons.bell,
-                    isReminderSet: isReminderSet,
-                    width: 0.43,
-                    onTap: () {
-                      if (!isReminderSet) {
-                        debugPrint('Show Notification');
-                        _showSnackBar(context);
-                        setState(() {
-                          isReminderSet = true; // Mark reminder as set
-                        });
-                      } else {
-                        setState(() {
-                          isReminderSet = false; // Change back to initial state
-                        });
-                      }
-                    },
-                  )
+                  Row(
+                    children: [
+                      DynamicButtonWidget(
+                        labelWhenSet: "Play",
+                        labelWhenUnset: "Play",
+                        iconWhenSet: CupertinoIcons.play_arrow_solid,
+                        iconWhenUnset: CupertinoIcons.play_arrow_solid,
+                        isReminderSet: isReminderSet,
+                        width: 0.32,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  MovieDetailsScreen(movieId: widget.movieId),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(width: 15),
+                      DynamicButtonWidget(
+                        labelWhenSet: "My List",
+                        labelWhenUnset: "My List",
+                        iconWhenSet: CupertinoIcons.check_mark,
+                        iconWhenUnset: CupertinoIcons.plus,
+                        isReminderSet: isReminderSet,
+                        width: 0.32,
+                        onTap: () {
+                          if (!isReminderSet) {
+                            debugPrint('Show Notification');
+                            _showSnackBar(context);
+                            setState(() {
+                              isReminderSet = true; // Mark reminder as set
+                            });
+                          } else {
+                            setState(() {
+                              isReminderSet =
+                                  false; // Change back to initial state
+                            });
+                          }
+                        },
+                      )
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -153,7 +158,7 @@ class _ComingSoonMovieWidgetState extends State<ComingSoonMovieWidget>
       content: FadeTransition(
         opacity: _snackBarAnimationController,
         child: Text(
-          'Reminder Set',
+          'Add to list',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
       ),

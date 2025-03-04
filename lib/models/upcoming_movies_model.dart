@@ -45,8 +45,6 @@ class UpcomingMoviesModel {
         totalResults: json["total_results"],
       );
 
-  get releaseDate => null;
-
   Map<String, dynamic> toJson() => {
         "dates": dates.toJson(),
         "page": page,
@@ -96,7 +94,7 @@ class Result {
   String backdropPath;
   List<int> genreIds;
   int id;
-  OriginalLanguage originalLanguage;
+  String originalLanguage;
   String originalTitle;
   String overview;
   double popularity;
@@ -129,7 +127,7 @@ class Result {
     String? backdropPath,
     List<int>? genreIds,
     int? id,
-    OriginalLanguage? originalLanguage,
+    String? originalLanguage,
     String? originalTitle,
     String? overview,
     double? popularity,
@@ -166,8 +164,7 @@ class Result {
         backdropPath: json["backdrop_path"],
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
         id: json["id"],
-        originalLanguage:
-            originalLanguageValues.map[json["original_language"]]!,
+        originalLanguage: json["original_language"],
         originalTitle: json["original_title"],
         overview: json["overview"],
         popularity: json["popularity"]?.toDouble(),
@@ -184,7 +181,7 @@ class Result {
         "backdrop_path": backdropPath,
         "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
         "id": id,
-        "original_language": originalLanguageValues.reverse[originalLanguage],
+        "original_language": originalLanguage,
         "original_title": originalTitle,
         "overview": overview,
         "popularity": popularity,
@@ -196,25 +193,4 @@ class Result {
         "vote_average": voteAverage,
         "vote_count": voteCount,
       };
-}
-
-enum OriginalLanguage { EN, FR, LV, ZH }
-
-final originalLanguageValues = EnumValues({
-  "en": OriginalLanguage.EN,
-  "fr": OriginalLanguage.FR,
-  "lv": OriginalLanguage.LV,
-  "zh": OriginalLanguage.ZH
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }

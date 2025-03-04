@@ -4,14 +4,14 @@ import 'package:netflix_clone/models/movie_model.dart';
 import 'package:netflix_clone/screens/movie_details_screen.dart';
 import 'package:netflix_clone/services/api_services.dart';
 
-class DownloadScreen extends StatefulWidget {
-  const DownloadScreen({super.key});
+class NotificationScreen extends StatefulWidget {
+  const NotificationScreen({super.key});
 
   @override
-  State<DownloadScreen> createState() => _DownloadScreenState();
+  State<NotificationScreen> createState() => _NotificationScreenState();
 }
 
-class _DownloadScreenState extends State<DownloadScreen> {
+class _NotificationScreenState extends State<NotificationScreen> {
   late Future<MoviesModel> downloads;
   ApiServices apiServices = ApiServices();
 
@@ -35,15 +35,9 @@ class _DownloadScreenState extends State<DownloadScreen> {
           ),
         ),
         title: const Text(
-          'Downloads',
+          'Notifications',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.edit, color: Colors.white),
-          ),
-        ],
         backgroundColor: Colors.black,
       ),
       body: Column(
@@ -51,18 +45,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
           Container(
             padding: const EdgeInsets.all(10),
             child: const Row(
-              children: [
-                Icon(Icons.settings, color: Colors.white),
-                SizedBox(width: 10),
-                Text(
-                  'Smart Downloads',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+              children: [],
             ),
           ),
           Expanded(
@@ -91,7 +74,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
                       return ListTile(
                         leading: Image.network(
                           "$imageUrl${movie.posterPath}",
-                          width: 100,
+                          width: 120,
                           height: 70,
                           fit: BoxFit.cover,
                         ),
@@ -101,8 +84,6 @@ class _DownloadScreenState extends State<DownloadScreen> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(color: Colors.white70)),
-                        trailing: const Icon(Icons.arrow_forward_ios,
-                            color: Colors.white),
                         onTap: () {
                           // Navigate to MovieDetailScreen
                           Navigator.push(
